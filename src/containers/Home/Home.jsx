@@ -19,11 +19,16 @@ class Home extends Component {
 
   handleChange = (event) => {
     this.setState({ nameSearch: event.target.value });
+    // needed to add 'this.props.actions' to get filter working here
+    this.props.actions.productActions.filterProducts(
+      event.target.value,
+      this.props.products
+    );
   };
 
   render() {
     const { nameSearch } = this.state;
-    const { products, actions } = this.props;
+    const { products, filters, actions } = this.props;
     const compareProducts = products.filter((product) => product.compare);
 
     return (
@@ -40,7 +45,10 @@ class Home extends Component {
           </div>
         </div>
         <ProductList
-          products={products}
+          /*
+           * Quick and dirty way to show all products when no filter is applied
+           */
+          products={nameSearch ? filters : products}
           nameSearch={nameSearch}
           compare={actions.productActions.compare}
         />
@@ -55,6 +63,7 @@ class Home extends Component {
 export default connect(
   (state) => ({
     products: state.product,
+    filters: state.filter,
   }),
   (dispatch) => ({
     actions: {
