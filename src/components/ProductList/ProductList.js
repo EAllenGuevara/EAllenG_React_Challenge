@@ -1,9 +1,11 @@
 import React from "react";
+import { matchSorter } from "match-sorter";
 import { Product } from "..";
 
 const ProductList = ({ products, compare, nameSearch }) => {
   const renderProducts = () => {
-    return products;
+    return matchSorter(products, nameSearch, { keys: ["name"] });
+    // return products.filter((product) => product.name.includes(nameSearch));
   };
 
   return (
